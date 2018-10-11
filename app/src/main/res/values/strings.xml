@@ -1,0 +1,29 @@
+<resources>
+    <string name="app_name">Конвертор валют</string>
+    <string name="sum">Сумма</string>
+    <string name="convert">Конвертировать</string>
+    <string name="convert_button">Конвертировать</string>
+    <string name="rate">Курс: </string>
+    <string name="result">Результат: </string>
+    <string name="on_failure_toast">Что-то пошло не так… Пожалуйста, попробуйте позже!</string>
+    <string name="no_internet_connection">Упс… Проверьте подключение к интернету.</string>
+
+    <!--Перечень валют-->
+    <string-array name="currencies_array">
+        <item>AUD</item>
+        <item>BRL</item>
+        <item>BTC</item>
+        <item>CAD</item>
+        <item>CNY</item>
+        <item>EUR</item>
+        <item>GBP</item>
+        <item>ILS</item>
+        <item>INR</item>
+        <item>ISK</item>
+        <item>JPY</item>
+        <item>RUB</item>
+        <item>TRY</item>
+        <item>UAH</item>
+        <item>USD</item>
+    </string-array>
+</resources>
