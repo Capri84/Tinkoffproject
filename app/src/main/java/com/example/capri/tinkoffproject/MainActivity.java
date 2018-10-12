@@ -3,11 +3,13 @@ package com.example.capri.tinkoffproject;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.design.widget.TextInputEditText;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -34,10 +36,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     Spinner spinnerConvertTo;
     String convertFrom;
     String convertTo;
+    double result;
     ProgressBar progressBar;
     Button convertButton;
     ConnectivityManager cm;
     NetworkInfo activeNetwork;
+    TextView rate;
+    TextView resultAmount;
+    TextInputEditText inputEditText;
+    TextInputLayout til;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,9 +56,29 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         progressBar = findViewById(R.id.progress_bar);
         progressBar.setVisibility(View.INVISIBLE);
         convertButton = findViewById(R.id.convert_btn);
+        rate = findViewById(R.id.exchange_rate_tv);
+        resultAmount = findViewById(R.id.result_amount_tv);
+        inputEditText = findViewById(R.id.sum_to_convert);
+        til = findViewById(R.id.sum_til);
         convertButton.setOnClickListener(this);
 
         setupSpinners();
+    }
+
+    // This method saves the current state of the data.
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putDouble("exchangeRate", result);
+        outState.putDouble("resultAmount", totalExchangeCount(result));
+    }
+
+    // This method restores saved state of the data.
+    @Override
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        rate.setText(String.valueOf(savedInstanceState.getDouble("exchangeRate")));
+        resultAmount.setText(String.valueOf(savedInstanceState.getDouble("resultAmount")));
     }
 
     /**
@@ -103,6 +130,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
+        if (til.isErrorEnabled()) {
+            til.setErrorEnabled(false);
+        }
+        if (TextUtils.isEmpty(inputEditText.getText().toString().trim())) {
+            til.setError(getText(R.string.no_sum));
+            return;
+        }
         convertButton.setText("");
         progressBar.setVisibility(View.VISIBLE);
         getNetworkState();
@@ -119,10 +153,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 @Override
                 public void onResponse(Call<HashMap<String, Double>> call,
                                        Response<HashMap<String, Double>> response) {
-                    double result = response.body().get(currencyPair);
-                    TextView rate = findViewById(R.id.exchange_rate_tv);
+                    result = response.body().get(currencyPair);
                     rate.setText(String.valueOf(result));
-                    TextView resultAmount = findViewById(R.id.result_amount_tv);
                     resultAmount.setText(String.valueOf(totalExchangeCount(result)));
                     progressBar.setVisibility(View.INVISIBLE);
                     convertButton.setText(R.string.convert_button);
@@ -143,7 +175,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public double totalExchangeCount(double rate) {
-        TextInputEditText inputEditText = findViewById(R.id.sum_to_convert);
         String sum = inputEditText.getText().toString().trim();
         if (!TextUtils.isEmpty(sum)) {
             double sumToConvert = Double.parseDouble(sum);

@@ -2,11 +2,14 @@
     <string name="app_name">Конвертор валют</string>
     <string name="sum">Сумма</string>
     <string name="convert">Конвертировать</string>
+    <string name="currency_from">из: </string>
+    <string name="currency_to">в: </string>
     <string name="convert_button">Конвертировать</string>
     <string name="rate">Курс: </string>
     <string name="result">Результат: </string>
     <string name="on_failure_toast">Что-то пошло не так… Пожалуйста, попробуйте позже!</string>
     <string name="no_internet_connection">Упс… Проверьте подключение к интернету.</string>
+    <string name="no_sum">Введите сумму для конвертации.</string>
 
     <!--Перечень валют-->
     <string-array name="currencies_array">
